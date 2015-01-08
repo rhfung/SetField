@@ -1,0 +1,3 @@
+echo $@
+javac -cp pdfbox-app-1.8.8.jar:preflight-app-1.8.8.jar:pdfbox-1.8.8.jar:jempbox-1.8.8.jar SetField.java
+java -cp pdfbox-app-1.8.8.jar:preflight-app-1.8.8.jar:pdfbox-1.8.8.jar:jempbox-1.8.8.jar:. SetField $@
