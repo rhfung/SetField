@@ -17,6 +17,7 @@
 
 import java.io.IOException;
 
+import java.util.Arrays;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
@@ -44,20 +45,21 @@ public class SetField
      *
      * @throws IOException If there is an error setting the field.
      */
-    public void setField( PDDocument pdfDocument, String name, String value ) throws IOException
+    public void setField( PDDocument pdfDocument, String[] args) throws IOException
     {
         PDDocumentCatalog docCatalog = pdfDocument.getDocumentCatalog();
         PDAcroForm acroForm = docCatalog.getAcroForm();
-        PDField field = acroForm.getField( name );
-        if( field != null )
-        {
-            field.setValue( value );
+        for (int i = 0; i < args.length - 1; i = i + 2) {
+          PDField field = acroForm.getField( args[i] );
+          if( field != null )
+          {
+              field.setValue( args[i + 1] );
+          }
+          else
+          {
+              System.err.println( "No field found with name:" + args[i] );
+          }
         }
-        else
-        {
-            System.err.println( "No field found with name:" + name );
-        }
-
     }
 
     /**
@@ -81,7 +83,7 @@ public class SetField
         PDDocument pdf = null;
         try
         {
-            if( args.length != 3 )
+            if( args.length < 3 )
             {
                 usage();
             }
@@ -90,7 +92,7 @@ public class SetField
                 SetField example = new SetField();
 
                 pdf = PDDocument.load( args[0] );
-                example.setField( pdf, args[1], args[2] );
+                example.setField( pdf, Arrays.copyOfRange(args, 1, args.length) );
                 pdf.save( args[0] + ".computed.pdf" );
             }
         }
@@ -107,6 +109,6 @@ public class SetField
      */
     private static void usage()
     {
-        System.err.println( "usage: org.apache.pdfbox.examples.fdf.SetField <pdf-file> <field-name> <field-value>" );
+      System.err.println( "usage: org.apache.pdfbox.examples.fdf.SetField <pdf-file> <field-name> <field-value> [[<field-name> <field-value>] ...]" );
     }
 }
