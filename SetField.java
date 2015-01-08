@@ -91,7 +91,7 @@ public class SetField
 
                 pdf = PDDocument.load( args[0] );
                 example.setField( pdf, args[1], args[2] );
-                pdf.save( args[0] );
+                pdf.save( args[0] + ".computed.pdf" );
             }
         }
         finally
